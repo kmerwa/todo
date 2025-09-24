@@ -1,5 +1,5 @@
 {
-  "name": "ebilis.react",
+  "name": "todo",
   "private": true,
   "version": "0.0.0",
   "homepage": "https://kmerwa.github.io/todo",
@@ -8,7 +8,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "vite build && gh-pages -d dist"
   },
   "dependencies": {
     "localforage": "^1.10.0",
