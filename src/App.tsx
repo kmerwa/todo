@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import AddTodo from './components/AddTodo'
 import localforage from 'localforage'
+import AddTask from './components/AddTask'
 
 type Task = {
   text: string;
@@ -19,7 +20,9 @@ export const colors = ["#6A5ACD", "#20B2AA", "#FF8C00", "#2E8B57", "#DC143C", "#
 
 function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTodo, setIsTodo] = useState(false);
+  const [isTask, setIsTask] = useState(false);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   useEffect(() => {
     localforage.getItem<Todo[]>("todos").then((saved) => {
@@ -53,16 +56,25 @@ function App() {
         <h1>Zwisker Todo 🎯</h1>
         <p>Less chaos, more focus.</p>
 
-        <button onClick={() => setIsModalOpen(true)}>
+        <button onClick={() => setIsTodo(true)}>
           Add Todo
         </button>
       </div>
       
       <AddTodo 
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={isTodo}
+        onClose={() => setIsTodo(false)}
         onSave={addTodo}
         />
+
+      <AddTask
+        isOpen={isTask}
+        onClose={() => setIsTask(false)}
+        onSave={(text) => {
+          if (activeIndex !== null) {
+            addTask(activeIndex, text);
+          }
+        }}/>
 
       <div style={{
         display: "flex",
@@ -82,16 +94,16 @@ function App() {
             <h3>{todo.title}</h3>
             <button
               onClick={() => {
-                const task = prompt("Enter task:");
-                if (task) addTask(i, task);
-              }}>
+                setIsTask(true);
+                setActiveIndex(i);
+                }}>
                 Add Task
             </button>
             <div>
               {todo.tasks.map((task, j) => (
                 <label key={j}
                 style={{
-                  display: "flex",
+                  display: "flex",  
                   alignItems: "center",
                   gap: "8px",
                   textDecoration: task.completed ? "line-through" : "none"

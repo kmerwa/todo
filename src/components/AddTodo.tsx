@@ -1,4 +1,4 @@
-import React, { PureComponent, useState } from 'react'
+import React, { PureComponent, useEffect, useRef, useState } from 'react'
 import { colors } from '../App';
 
 type AddTodoProps = {
@@ -10,7 +10,14 @@ type AddTodoProps = {
 function AddTodo({ isOpen, onClose, onSave }: AddTodoProps) {
     const [text, setText] = React.useState("");
     const [selectedColor, setSelectedColor] = React.useState(0);
+    const inputRef = useRef<HTMLInputElement>(null);
 
+    useEffect(() => {
+        if (isOpen && inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, [isOpen]);
+    
     if (!isOpen) return null;
 
     return(
@@ -32,6 +39,7 @@ function AddTodo({ isOpen, onClose, onSave }: AddTodoProps) {
         >
             <h2>Add Todo</h2>
             <input 
+                ref={inputRef}
                 type="text" 
                 placeholder='Enter todo'
                 value={text}

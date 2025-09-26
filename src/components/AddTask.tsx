@@ -1,15 +1,20 @@
-import React, { PureComponent, useState } from 'react'
-import { colors } from '../App';
+import React, { PureComponent, useEffect, useRef, useState } from 'react'
 
 type AddTaskProps = {
     isOpen: boolean;
     onClose: () => void;
-    onSave: (text: string, color: number) => void;
+    onSave: (text: string) => void;
 };
 
 function AddTask({ isOpen, onClose, onSave }: AddTaskProps) {
     const [text, setText] = React.useState("");
-    const [selectedColor, setSelectedColor] = React.useState(0);
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+    if (isOpen && inputRef.current) {
+        inputRef.current.focus();
+    }
+    }, [isOpen]);
 
     if (!isOpen) return null;
 
@@ -30,35 +35,14 @@ function AddTask({ isOpen, onClose, onSave }: AddTaskProps) {
                 borderRadius: "12px"
             }}
         >
-            <h2>Add Todo</h2>
+            <h2>Add Task</h2>
             <input 
+                ref={inputRef}
                 type="text" 
                 placeholder='Enter todo'
                 value={text}
                 onChange={(e) => setText(e.target.value)}
             />
-            <div
-                style={{
-                    display: "flex",
-                    gap: "10px",
-                    marginBottom: "15px",
-                    flexWrap: "wrap"
-                }}>
-                {colors.map((c, i) => (
-                    <div
-                        key={i}
-                        onClick={() => setSelectedColor(i)}
-                        style={{
-                            width: "30px",
-                            height: "30px",
-                            borderRadius: "50%",
-                            background: c,
-                            border: i === selectedColor ? "3px solid white" : "2px solid transparent",
-                            cursor: "pointer"
-                        }}>
-                    </div>
-                ))}
-            </div>
             <div style={{ 
                 display: "flex",
                 alignSelf: "end",
@@ -68,9 +52,8 @@ function AddTask({ isOpen, onClose, onSave }: AddTaskProps) {
                 <button
                     onClick={() => {
                         if (text.trim()) {
-                            onSave(text, selectedColor);
+                            onSave(text);
                             setText("");
-                            setSelectedColor(0);
                             onClose();
                         }
                     }}>
