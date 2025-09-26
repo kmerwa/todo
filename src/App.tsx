@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import AddTask from './components/AddTask'
+import AddTodo from './components/AddTodo'
 import localforage from 'localforage'
 
 type Task = {
@@ -58,7 +58,7 @@ function App() {
         </button>
       </div>
       
-      <AddTask 
+      <AddTodo 
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSave={addTodo}
@@ -67,13 +67,17 @@ function App() {
       <div style={{
         display: "flex",
         flexWrap: "wrap",
-        gap: "20px",
-        marginTop: "20px"
+        gap: "15px",
+        marginTop: "15px",
+        maxWidth: "700px",
+        justifyContent: "center"
         }}>
         {todos.map((todo, i) => (
           <div key={i}
           style={{
-            background: colors[todo.color]
+            background: colors[todo.color],
+            borderRadius: "12px",
+            padding: "10px"
           }}>
             <h3>{todo.title}</h3>
             <button
