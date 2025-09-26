@@ -87,21 +87,24 @@ function App() {
               }}>
                 Add Task
             </button>
-            <ul>
+            <div>
               {todo.tasks.map((task, j) => (
-                <li key={j}
+                <label key={j}
                 style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
                   textDecoration: task.completed ? "line-through" : "none"
                 }}>
+                  <input 
+                  type="checkbox"
+                  checked={task.completed}
+                  onChange={() => toggleTask(i, j)}
+                   />
                   {task.text}
-                  <button
-                    onClick={() => {toggleTask(i, j)}}
-                    >
-                      {task.completed ? "Undo" : "Done"}
-                  </button>
-                </li>
+                </label>
               ))}
-            </ul>
+            </div>
           </div>
         ))}
       </div>  
